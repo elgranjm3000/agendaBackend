@@ -8,15 +8,22 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends BaseController
 {
-    public function login(LoginRequest $request): JsonResponse
+
+    
+
+     public function login(LoginRequest $request): JsonResponse
     {
 
-        $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+          $user = User::on('secondary')
+            ->where('email', $request->email)
+            ->first();
+
+        if (!$user || $user->password !== md5($request->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -31,8 +38,8 @@ class AuthController extends BaseController
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-                'role' => $user->role,
-                'company_id' => $user->company_id,
+                'role' => 'owner',
+                'company_id' => 1,
             ],
             'token' => $token,
         ], 'Login successful');
@@ -47,13 +54,20 @@ class AuthController extends BaseController
 
     public function me(Request $request): JsonResponse
     {
+        $user = $request->user();
+
+
+        if (!$user) {
+            return $this->errorResponse('Unauthenticated', 401);
+        }
+
         return $this->successResponse([
-            'id' => $request->user()->id,
-            'name' => $request->user()->name,
-            'email' => $request->user()->email,
-            'role' => $request->user()->role,
-            'company_id' => $request->user()->company_id,
-            'last_login_at' => $request->user()->last_login_at,
+            'id' => $user->id, // Usará el accessor getIdAttribute()
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'company_id' => $user->company_id,
+            'last_login_at' => $user->last_login_at,
         ]);
     }
 }
