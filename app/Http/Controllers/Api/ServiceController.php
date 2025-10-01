@@ -11,7 +11,7 @@ class ServiceController extends BaseController
 {
     public function __construct()
     {
-        $this->authorizeResource(Service::class, 'service');
+        //$this->authorizeResource(Service::class, 'service');
     }
 
     public function index(Request $request): JsonResponse

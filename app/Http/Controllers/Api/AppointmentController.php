@@ -14,13 +14,15 @@ class AppointmentController extends BaseController
 {
     public function __construct()
     {
-        $this->authorizeResource(Appointment::class, 'appointment');
+        //$this->authorizeResource(Appointment::class, 'appointment');
     }
 
     public function index(Request $request): JsonResponse
     {
+
+   
         $appointments = Appointment::query()
-            ->with(['client:id,name', 'service:id,name,price', 'user:id,name'])
+            ->with(['client:id,name', 'service:id,name,price'])
             ->when($request->status, fn($q) => $q->where('status', $request->status))
             ->when($request->user_id, fn($q) => $q->where('user_id', $request->user_id))
             ->when($request->client_id, fn($q) => $q->where('client_id', $request->client_id))

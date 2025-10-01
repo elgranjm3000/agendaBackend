@@ -104,6 +104,11 @@ class User extends Authenticatable
         ];
         return $roleMap[$this->attributes['id_rol'] ?? 0] ?? 'viewer';
     }
+
+     public function isStaff(): bool
+    {
+        return in_array($this->role, ['owner', 'manager', 'staff']);
+    }
 }
 
 

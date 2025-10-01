@@ -12,7 +12,7 @@ class ClientController extends BaseController
 {
     public function __construct()
     {
-        $this->authorizeResource(Client::class, 'client');
+        //$this->authorizeResource(Client::class, 'client');
     }
 
     public function index(Request $request): JsonResponse
