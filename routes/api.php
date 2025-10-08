@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\JobPhoneController;
 use App\Http\Controllers\Api\JobStatusController;
 use App\Http\Controllers\Api\JobIndicatorController;
 use App\Http\Controllers\Api\JobAttribController;
+use App\Http\Controllers\Api\DashboardController;
 
 Route::prefix('v1')->group(function () {
     
@@ -156,6 +157,24 @@ Route::prefix('v1')->group(function () {
             Route::get('/export/{type}', [JobAttribController::class, 'export']);
             Route::post('/import', [JobAttribController::class, 'import']);
         });
+
+
+        // Dashboard principal - Obtiene todos los indicadores
+        Route::get('/dashboard', [DashboardController::class, 'index']);
+        
+        // KPIs individuales (tipos 10-13)
+        Route::get('/dashboard/kpi/10', [DashboardController::class, 'kpi10']);
+        Route::get('/dashboard/kpi/11', [DashboardController::class, 'kpi11']);
+        Route::get('/dashboard/kpi/12', [DashboardController::class, 'kpi12']);
+        Route::get('/dashboard/kpi/13', [DashboardController::class, 'kpi13']);
+        
+        // Gráficos
+        Route::get('/dashboard/chart/dual', [DashboardController::class, 'chartDual']);
+        Route::get('/dashboard/chart/single', [DashboardController::class, 'chartSingle']);
+        
+        // Utilidades
+        Route::get('/dashboard/periods', [DashboardController::class, 'periods']);
+        Route::get('/dashboard/compare', [DashboardController::class, 'compare']);
         
         // Data Export
         Route::post('/export/{type}/{format}', function ($type, $format) {

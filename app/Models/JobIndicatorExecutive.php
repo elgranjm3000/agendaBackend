@@ -32,10 +32,10 @@ class JobIndicatorExecutive extends Model
     protected $casts = [
         'type' => 'integer',
         'amount' => 'float',
-        'y1' => 'array',
-        'x1' => 'array',
-        'y2' => 'array',
-        'x2' => 'array',
+        'y1' => 'string',
+        'x1' => 'string',
+        'y2' => 'string',
+        'x2' => 'string',
     ];
 
     public function executive(): BelongsTo
