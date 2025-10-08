@@ -23,7 +23,9 @@ class AuthController extends BaseController
             ->where('email', $request->email)
             ->first();
 
+
         if (!$user || $user->password !== md5($request->password)) {
+         
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);

@@ -55,7 +55,9 @@ class JobDayExecutive extends Model
 
     public function contacts(): HasMany
     {
-        return $this->hasMany(JobDayContact::class, 'id_client', 'id_client');
+        return $this->hasMany(JobDayContact::class, 'id_client', 'id_client')
+        ->where('id_status', 2)
+        ->whereColumn('job_day_contact.id_offers', 'id_offers');
     }
 
     public function getFullNameAttribute(): string
