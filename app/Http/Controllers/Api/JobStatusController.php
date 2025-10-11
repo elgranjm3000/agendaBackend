@@ -32,6 +32,10 @@ class JobStatusController extends BaseController
             $query->where('descrip', 'like', "%{$request->search}%");
         }
 
+        if ($request->has('id_status')) {
+            $query->where('id_status', '=', "{$request->id_status}");
+        }
+
         if ($request->boolean('with_counts')) {
             $query->withCount(['executives', 'contacts', 'contactStatuses']);
         }
@@ -140,6 +144,10 @@ class JobStatusController extends BaseController
 
         if ($request->has('is_life')) {
             $query->where('is_life', $request->boolean('is_life'));
+        }
+
+         if ($request->has('id_status')) {
+            $query->where('id_status', $request->id_status);
         }
 
         if ($request->has('is_scheduled')) {

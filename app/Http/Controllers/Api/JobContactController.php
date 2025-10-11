@@ -90,6 +90,7 @@ class JobContactController extends BaseController
             'id_status' => 'required|integer',
             'id_contact' => 'required|integer',
             'scheduled_date' => 'nullable|date',
+            'comment' => 'nullable|string', // Nuevo campo de comentario
         ]);
 
         if ($validator->fails()) {

@@ -56,6 +56,53 @@ class DashboardController extends BaseController
         return $this->successResponse($dashboard);
     }
 
+
+    public function summary(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'period' => 'nullable|string|size:6|regex:/^\d{6}$/',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->errorResponse('Validation failed', 422, $validator->errors()->toArray());
+        }
+
+        $period = $request->period ?? Carbon::now()->format('Ym');
+        $idExecutive = auth()->user()->rut_number ?? auth()->user()->id;
+
+        // Obtener indicadores tipo 1, 2, 3, 4
+        $indicators = JobIndicatorExecutive::where('id_executive', $idExecutive)
+            ->where('period', $period)
+            ->whereIn('type', [1, 2, 3, 4])
+            ->get()
+            ->keyBy('type');
+
+        $summary = [
+            'period' => $period,
+            'executive_id' => $idExecutive,
+            'summary_1' => $this->formatSummaryItem($indicators->get(1)),
+            'summary_2' => $this->formatSummaryItem($indicators->get(2)),
+            'summary_3' => $this->formatSummaryItem($indicators->get(3)),
+            'summary_4' => $this->formatSummaryItem($indicators->get(4)),
+        ];
+
+        return $this->successResponse($summary);
+    }
+
+
+    private function formatSummaryItem($indicator): ?array
+    {
+        if (!$indicator) {
+            return null;
+        }
+
+        return [
+            'title' => $indicator->title,
+            'maskAmount' => $indicator->maskAmount,
+            'footer' => $indicator->footer,
+        ];
+    }
+
     /**
      * GET /api/dashboard/kpi/10
      * Obtener KPI tipo 10
@@ -355,29 +402,5 @@ class DashboardController extends BaseController
         }, $values);
     }
 
-    /**
-     * Parsear campos de array (JSON)
-     */
-    /*private function parseArrayField($field): ?array
-    {
-        if (empty($field)) {
-            return null;
-        }
-
-        // Si ya es un array, devolverlo
-        if (is_array($field)) {
-            return $field;
-        }
-
-        // Si es un string JSON, parsearlo
-        $decoded = json_decode($field, true);
-        
-        // Si falla el decode, intentar separar por comas
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return array_map('trim', explode(',', $field));
-        }
-
-        return $decoded;
-    }*/
-
+    
 }

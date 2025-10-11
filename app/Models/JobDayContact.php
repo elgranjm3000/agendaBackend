@@ -20,6 +20,7 @@ class JobDayContact extends Model
         'id_status',
         'id_contact',
         'scheduled_date',
+        'comment'
     ];
 
     protected $casts = [

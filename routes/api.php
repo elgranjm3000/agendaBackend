@@ -161,7 +161,8 @@ Route::prefix('v1')->group(function () {
 
         // Dashboard principal - Obtiene todos los indicadores
         Route::get('/dashboard', [DashboardController::class, 'index']);
-        
+        Route::get('/dashboard/summary', [DashboardController::class, 'summary']);
+
         // KPIs individuales (tipos 10-13)
         Route::get('/dashboard/kpi/10', [DashboardController::class, 'kpi10']);
         Route::get('/dashboard/kpi/11', [DashboardController::class, 'kpi11']);
