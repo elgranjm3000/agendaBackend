@@ -42,6 +42,7 @@ class AuthController extends BaseController
                 'email' => $user->email,
                 'role' => 'owner',
                 'company_id' => 1,
+                'id_executive' => $user->rut_number,
             ],
             'token' => $token,
         ], 'Login successful');
