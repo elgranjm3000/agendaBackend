@@ -71,7 +71,7 @@ class JobExecutiveController extends BaseController
         // Ordenamiento
         $sortBy = $request->get('sort_by', 'stamp');
         $sortOrder = $request->get('name', 'desc');
-        $query->orderBy('name', 'desc');
+        $query->orderBy('name', 'asc');
 
         $executives = $query->paginate($request->per_page ?? 15);
 
